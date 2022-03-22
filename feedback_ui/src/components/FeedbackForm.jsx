@@ -1,6 +1,21 @@
 import React from "react";
+import { useState } from "react";
 
-const FeedbackForm = ({ submithandler }) => {
+const FeedbackForm = ({ submithandler, setInput, input }) => {
+  const [isShort, setIsShort] = useState(true);
+  const [message, setMessage] = useState("");
+
+  const textChangeHandler = (e) => {
+    setInput(e.target.value);
+  };
+  const textLengthHandler = () => {
+    if (isShort && input.length <= 10) {
+      setMessage("The message should be longer than 10 Character");
+    } else {
+      setMessage(null);
+    }
+  };
+  console.log(input.length);
   return (
     <div className="feedback-card">
       <div className="container">
@@ -18,10 +33,17 @@ const FeedbackForm = ({ submithandler }) => {
             <div className="number">10</div>
           </div>
           <div className="feedback-form">
-            <input type="text" className="feedback-form__text" />
+            <input
+              type="text"
+              className="feedback-form__text"
+              placeholder="Write a review"
+              onChange={textChangeHandler}
+              onChange={textLengthHandler}
+            />
             <button className="feedback-form__btn" onClick={submithandler}>
               Send
             </button>
+            {isShort && <div>{message}</div>}
           </div>
         </form>
       </div>

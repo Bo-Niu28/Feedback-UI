@@ -7,7 +7,7 @@ import FeedbackForm from "./components/FeedbackForm";
 import FeedbackRating from "./components/FeedbackRating";
 function App() {
   const [feedback, setFeedback] = useState(FeedbackDate);
-  const [input, setInput] = useState();
+  const [input, setInput] = useState("");
 
   //Handler
   const submitHandler = () => {
@@ -20,23 +20,13 @@ function App() {
     }
   };
 
-  const avergeRatingHandler = (arr) => {
-    return (
-      arr.forEach((item) => {
-        num = num + item.rate;
-      }) / arr.length
-    );
-  };
   return (
     <div className="app">
       <header>
         <h1>Feedback UI</h1>
       </header>
-      <FeedbackForm onClick={submitHandler} />
-      <FeedbackRating
-        feedback={feedback}
-        avergeRatingHandler={avergeRatingHandler}
-      />
+      <FeedbackForm onClick={submitHandler} input={input} setInput={setInput} />
+      <FeedbackRating feedback={feedback} />
       <FeedbackList feedback={feedback} deleteHandler={deleteHandler} />
     </div>
   );
