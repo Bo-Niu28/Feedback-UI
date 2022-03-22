@@ -19,6 +19,12 @@ body {
   margin: 0 auto;
 }
 
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 header {
   background-color: rgb(43, 52, 82);
   text-align: center;
