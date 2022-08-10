@@ -1,33 +1,23 @@
-import "./App.scss";
-import { useState } from "react";
-import FeedbackDate from "./data/FeedbackData";
-//Components
-import FeedbackList from "./components/FeedbackList";
-import FeedbackForm from "./components/FeedbackForm";
-import FeedbackRating from "./components/FeedbackRating";
+import logo from './logo.svg';
+import './App.css';
+
 function App() {
-  const [feedback, setFeedback] = useState(FeedbackDate);
-  const [input, setInput] = useState("");
-
-  //Handler
-  const submitHandler = () => {
-    console.log(test);
-  };
-
-  const deleteHandler = (id) => {
-    if (window.confirm("Do you want to delete")) {
-      setFeedback(feedback.filter((item) => item.id !== id));
-    }
-  };
-
   return (
-    <div className="app">
-      <header>
-        <h1>Feedback UI</h1>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
       </header>
-      <FeedbackForm onClick={submitHandler} input={input} setInput={setInput} />
-      <FeedbackRating feedback={feedback} />
-      <FeedbackList feedback={feedback} deleteHandler={deleteHandler} />
     </div>
   );
 }
