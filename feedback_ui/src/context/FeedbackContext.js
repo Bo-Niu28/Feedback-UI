@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 const FeedbackContext = createContext();
 
@@ -9,6 +8,7 @@ export const FeedbackProvider = ({ children }) => {
     item: {},
     edit: false,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchFeedback();
@@ -20,17 +20,30 @@ export const FeedbackProvider = ({ children }) => {
     );
     const data = await response.json();
     setFeedback(data);
+    setIsLoading(false);
   };
 
-  const deleteFeedback = (id) => {
+  const deleteFeedback = async (id) => {
     if (window.confirm("Are you sure you want ot delete this feedback?")) {
+      await fetch(`http://localhost:5000/feedback/${id}`, {
+        method: "DELETE",
+      });
       setFeedback(feedback.filter((item) => item.id !== id));
     }
   };
 
-  const addFeedback = (newFeedback) => {
-    newFeedback.id = uuidv4();
-    setFeedback([newFeedback, ...feedback]);
+  const addFeedback = async (newFeedback) => {
+    const response = await fetch("http://localhost:5000/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newFeedback),
+    });
+
+    const data = await response.json();
+
+    setFeedback([data, ...feedback]);
   };
 
   const editFeedback = (item) => {
@@ -40,14 +53,23 @@ export const FeedbackProvider = ({ children }) => {
     });
   };
 
-  const updateFeedback = (id, updItem) => {
+  const updateFeedback = async (id, updItem) => {
     // setFeedback(
     //   feedback.map((item) => (item.id === id ? { ...item, ...updItem } : item))
     // );
+    const response = await fetch(`http://localhost:5000/feedback/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updItem),
+    });
+
+    const data = await response.json();
 
     const editedFeedback = feedback.map((item) => {
       if (item.id === id) {
-        return { ...item, text: updItem.text, rating: updItem.rating };
+        return { ...item, text: data.text, rating: data.rating };
       }
       return item;
     });
@@ -63,6 +85,7 @@ export const FeedbackProvider = ({ children }) => {
         editFeedback,
         feedbackEdit,
         updateFeedback,
+        isLoading,
       }}
     >
       {children}
